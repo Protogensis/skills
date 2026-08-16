@@ -8,42 +8,27 @@
 | 官方 CLI fallback | `gpt-image-2` | 显式指定 API 路径时，需 `OPENAI_API_KEY` |
 | Grok 通道（扩展） | `grok-imagine-image-quality` 等 | 走 OpenAI 兼容中转站的备用生图通道 |
 
-## 目录结构
-
-```text
-imagegen/
-├── SKILL.md              # 技能主文档（agent 读取的入口）
-├── references/           # 详细参考文档
-│   ├── prompting.md      # 共享 prompt 原则
-│   ├── sample-prompts.md # 各资产类型 prompt 模板
-│   ├── cli.md            # 官方 CLI 用法
-│   ├── image-api.md      # API 参数速查
-│   └── codex-network.md  # CLI 模式网络排障
-├── scripts/              # 可执行脚本
-│   ├── image_gen.py      # 官方通道 CLI（generate/edit/generate-batch）
-│   ├── grok_gen.py       # Grok 通道 CLI（generate/edit）
-│   └── remove_chroma_key.py
-├── agents/openai.yaml    # UI 元数据（图标、显示名）
-├── assets/               # 技能图标
-├── run.sh                # 官方通道包装器（读 .env）
-├── grok.sh               # Grok 通道包装器（读 .env）
-├── .env.example          # 配置模板
-└── LICENSE               # Apache-2.0
-```
-
 ## 安装
 
-**Claude Code：**
+本技能是 [skills 合集仓库](https://github.com/Protogensis/skills) 的一个子目录。
+
+**skills CLI（自动处理子目录）：**
 
 ```sh
-git clone https://github.com/Protogensis/imagegen.git ~/.claude/skills/imagegen
+npx skills add Protogensis/skills/imagegen
 ```
 
-**跨 agent 标准路径**（`~/.agents/skills`，多 agent 共用，再按需软链）：
+**手动 clone + 软链：**
 
 ```sh
-git clone https://github.com/Protogensis/imagegen.git ~/.agents/skills/imagegen
-ln -s ~/.agents/skills/imagegen ~/.claude/skills/imagegen
+git clone https://github.com/Protogensis/skills.git ~/tmp-skills
+ln -s ~/tmp-skills/imagegen ~/.claude/skills/imagegen
+```
+
+或跨 agent 标准路径：
+
+```sh
+ln -s ~/tmp-skills/imagegen ~/.agents/skills/imagegen
 ```
 
 ## 配置
@@ -94,6 +79,6 @@ grok.sh edit --image 原图.png --prompt "..." --out out.png
 
 ## 致谢与许可
 
-官方通道部分派生自 [OpenAI Codex](https://github.com/openai/codex) 内置 imagegen 技能，遵循 [Apache-2.0](LICENSE)。
+官方通道部分派生自 [OpenAI Codex](https://github.com/openai/codex) 内置 imagegen 技能。
 
-Grok 通道扩展及中转站适配为本仓库添加，同样以 Apache-2.0 发布。
+Grok 通道扩展及中转站适配为本仓库添加。均以 [Apache-2.0](LICENSE) 发布。
