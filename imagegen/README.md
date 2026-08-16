@@ -69,12 +69,13 @@ run.sh generate-batch --prompts-file jobs.jsonl --out-dir output/imagegen/
 
 # Grok 通道
 grok.sh generate --prompt "..." --quality high --out out.png
+grok.sh generate --prompt "..." --aspect-ratio 16:9 --out out.png
 grok.sh edit --image 原图.png --prompt "..." --out out.png
 ```
 
 ## 已知差异（Grok 通道实测）
 
-- grok-imagine 系不严格遵守 `--size`，实际尺寸由模型自定
+- 尺寸参数只有 `--aspect-ratio W:H|auto`（默认 auto；经 `extra_body` 透传，中转站支持）；无 `--size`
 - 返回 URL 时脚本已带浏览器 UA 下载（部分图床 403 python 默认 UA）
 - `grok-imagine-edit` 可能因中转站上游池缺账号报 503，编辑需求可临时用官方通道替代
 

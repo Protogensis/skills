@@ -320,15 +320,20 @@ If installation is not possible in this environment, tell the user which depende
 
 ### 命令
 ```sh
-# 生成（默认 GROK_IMAGE_MODEL，当前=质量档）
+# 生成（默认 GROK_IMAGE_MODEL，当前=质量档；宽高比默认 auto 由模型自定）
 grok-image generate --prompt "..." --quality low --out out.png
+
+# 生成（指定宽高比）
+grok-image generate --prompt "..." --aspect-ratio 16:9 --out out.png
 
 # 生成（临时切标准档）
 grok-image generate --prompt "..." --quality low --model grok-imagine-image --out out.png
 
-# 编辑（默认 GROK_EDIT_MODEL=grok-imagine-edit）
+# 编辑（默认 GROK_EDIT_MODEL=grok-imagine-edit；输出跟随输入图比例）
 grok-image edit --image 原图.png --prompt "..." --out out.png
 ```
+
+尺寸只有 `--aspect-ratio W:H|auto` 一个参数（经 `extra_body` 透传，中转站已确认支持；无 `--size`）。
 
 ### .env 相关键
 查找顺序：`$IMAGEGEN_ENV` → `<skill>/.env` → `~/.config/imagegen/.env`（推荐后者，技能更新不丢）
@@ -338,7 +343,8 @@ grok-image edit --image 原图.png --prompt "..." --out out.png
 - `GROK_EDIT_MODEL`：默认编辑模型（`grok-imagine-edit`）
 
 ### 已知差异（2026-08 实测）
-- grok-imagine 系**不严格遵守 `--size`**：请求 1024x1024 实际输出 864x1152 / 1280x720 等由模型自定
+- grok-imagine 系按**宽高比**出图（官方 Imagine 接口语义）：用 `--aspect-ratio W:H` 控制；早期版本传 `--size` 不严格遵守（请求 1024x1024 输出 864x1152 等），已移除该参数。2026-08-16 实测透传生效：16:9→1280x720、9:16→720x1280、1:1→1024x1024；默认 auto 由模型自定（实测输出 864x1152）
+- 上游**拒绝 `quality:"auto"`**（422）：脚本已改为未显式指定 `--quality` 时不发送该字段，且 CLI 仅接受 low/medium/high（实测 low 可用）
 - 返回 URL 时脚本已带浏览器 UA 下载（部分图床 403 python 默认 UA），失败时会打印 URL 可手动 curl
 - 中转站按 key 分组显示模型列表：`GROK_API_KEY` 可见 grok 全家（15 个）；`OPENAI_API_KEY` 仅 6 个文本模型，但 gpt-image-2 生成/编辑实际可路由成功（列表未显示不代表不可用）
 - `grok-imagine-edit` 曾报 503 `grok_media_no_eligible_account`（中转站上游池缺账号，非本地配置问题）；编辑需求可临时用官方通道 `imagegen edit` 替代
