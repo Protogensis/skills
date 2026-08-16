@@ -1,6 +1,6 @@
-# CLI reference (`scripts/image_gen.py`)
+# CLI reference (`scripts/openai/image_gen.py`)
 
-This file is for the fallback CLI mode only. Read it when the user explicitly asks to use `scripts/image_gen.py` / CLI / API / model controls, or after the user explicitly confirms that a transparent-output request should use the `gpt-image-1.5` true-transparency fallback path.
+This file is for the fallback CLI mode only. Read it when the user explicitly asks to use `scripts/openai/image_gen.py` / CLI / API / model controls, or after the user explicitly confirms that a transparent-output request should use the `gpt-image-1.5` true-transparency fallback path.
 
 `generate-batch` is a CLI subcommand in this fallback path. It is not a top-level mode of the skill.
 The word `batch` in a user request is not CLI opt-in by itself.
@@ -17,7 +17,7 @@ Set a stable path to the skill CLI (default `CODEX_HOME` is `~/.codex`):
 
 ```
 export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
-export IMAGE_GEN="$CODEX_HOME/skills/.system/imagegen/scripts/image_gen.py"
+export IMAGE_GEN="$CODEX_HOME/skills/.system/imagegen/scripts/openai/image_gen.py"
 ```
 
 Install dependencies into that environment with its package manager. In uv-managed environments, `uv pip install ...` remains the preferred path.
@@ -58,7 +58,7 @@ python "$IMAGE_GEN" edit \
 ## Guardrails
 - Use the bundled CLI directly (`python "$IMAGE_GEN" ...`) after activating the correct environment.
 - Do **not** create one-off runners (for example `gen_images.py`) unless the user explicitly asks for a custom wrapper.
-- **Never modify** `scripts/image_gen.py`. If something is missing, ask the user before doing anything else.
+- **Never modify** `scripts/openai/image_gen.py`. If something is missing, ask the user before doing anything else.
 - Do not silently downgrade from CLI `gpt-image-2` or built-in `image_gen` to CLI `gpt-image-1.5`; ask first unless the user explicitly requested `gpt-image-1.5`.
 
 ## Defaults

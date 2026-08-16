@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """离线测试：fake client 捕获 grok_gen.py 发出的 API 参数，不发真实请求。
 
-运行: python3 scripts/test_grok_gen.py
+运行: python3 scripts/grok/test_grok_gen.py（在 imagegen/ 下执行）
 """
 import base64
 import contextlib
 import io
+import os
 import sys
 import tempfile
 import unittest
@@ -114,6 +115,18 @@ class EditParamsTest(unittest.TestCase):
         self.assertEqual(kw["n"], 1)
         self.assertEqual(Path(out).read_bytes(), b"fakepng")
         self.assertIn("已保存", stdout.getvalue())
+
+
+class EnvConfigTest(unittest.TestCase):
+    def test_missing_grok_base_url_exits(self):
+        """GROK_BASE_URL 未设置时拒绝启动，不回退到 OPENAI_BASE_URL。"""
+        env = {"GROK_API_KEY": "sk-test", "OPENAI_BASE_URL": "https://leak.example/v1"}
+        fake_openai = mock.MagicMock()  # 不依赖真实 openai SDK
+        with mock.patch.dict(os.environ, env, clear=True), \
+             mock.patch.dict(sys.modules, {"openai": fake_openai}):
+            with self.assertRaises(SystemExit):
+                grok_gen.client()
+        fake_openai.OpenAI.assert_not_called()  # 且不得构造任何 client
 
 
 if __name__ == "__main__":

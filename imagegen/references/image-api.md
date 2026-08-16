@@ -1,6 +1,6 @@
 # Image API quick reference
 
-This file is for the fallback CLI mode only. Use it when the user explicitly asks to use `scripts/image_gen.py` / CLI / API / model controls, or after the user explicitly confirms that a transparent-output request should use the `gpt-image-1.5` true-transparency fallback path.
+This file is for the fallback CLI mode only. Use it when the user explicitly asks to use `scripts/openai/image_gen.py` / CLI / API / model controls, or after the user explicitly confirms that a transparent-output request should use the `gpt-image-1.5` true-transparency fallback path.
 
 These parameters describe the Image API and bundled CLI fallback surface. Do not assume they are normal arguments on the built-in `image_gen` tool.
 
@@ -70,11 +70,11 @@ Model-specific note for `input_fidelity`:
 
 `gpt-image-2` does not currently support the Image API `background=transparent` parameter. In explicit CLI/API fallback mode, keep `gpt-image-2` when a flat chroma-key background plus local alpha extraction with `python "${CODEX_HOME:-$HOME/.codex}/skills/.system/imagegen/scripts/remove_chroma_key.py"` is acceptable.
 
-Use CLI `gpt-image-1.5` with `background=transparent` and a transparent-capable output format such as `png` or `webp` only after the user explicitly confirms that fallback, unless they already requested `gpt-image-1.5`, `scripts/image_gen.py`, or CLI fallback. If the user asks for true/native transparency, the subject is too complex for clean chroma-key removal, or local background removal fails validation, explain the tradeoff and ask before switching.
+Use CLI `gpt-image-1.5` with `background=transparent` and a transparent-capable output format such as `png` or `webp` only after the user explicitly confirms that fallback, unless they already requested `gpt-image-1.5`, `scripts/openai/image_gen.py`, or CLI fallback. If the user asks for true/native transparency, the subject is too complex for clean chroma-key removal, or local background removal fails validation, explain the tradeoff and ask before switching.
 
 ## Output
 - `data[]` list with `b64_json` per image
-- The bundled `scripts/image_gen.py` CLI decodes `b64_json` and writes output files for you.
+- The bundled `scripts/openai/image_gen.py` CLI decodes `b64_json` and writes output files for you.
 
 ## Limits and notes
 - Input images and masks must be under 50MB.

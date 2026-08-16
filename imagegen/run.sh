@@ -29,4 +29,4 @@ fi
 set -a
 . "$ENV_FILE"
 set +a
-exec "$DIR/.venv/bin/python" "$DIR/scripts/image_gen.py" "$@"
+exec "$DIR/.venv/bin/python" "$DIR/scripts/openai/image_gen.py" "$@"

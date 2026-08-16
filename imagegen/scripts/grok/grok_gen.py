@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
-"""Grok 生图通道：通过同一中转站(base_url) + GROK_API_KEY 调用 grok 生图模型。
+"""Grok 生图通道：通过 GROK_BASE_URL + GROK_API_KEY 调用 grok 生图模型（与 openai 通道配置互相独立）。
 
 用法:
   grok_gen.py generate --prompt "..." [--aspect-ratio 16:9] [--quality low|medium|high] [--out out.png] [--model 模型名]
   grok_gen.py edit --image 原图.png --prompt "修改指令" [--out out.png] [--model 模型名]
 
 环境变量(从 .env 或 export 读取):
-  OPENAI_BASE_URL  中转站地址(与 openai key 共用)
-  GROK_API_KEY     grok key
-  GROK_IMAGE_MODEL 默认 grok-imagine-image-quality(中转站可能有别的名字)
+  GROK_BASE_URL     中转站地址（grok 专用；须以 /v1 结尾）
+  GROK_API_KEY      grok key
+  GROK_IMAGE_MODEL  默认 grok-imagine-image-quality(中转站可能有别的名字)
 """
 import argparse, base64, os, re, sys
 
 def client():
     from openai import OpenAI
-    base = os.environ.get("OPENAI_BASE_URL")
+    base = os.environ.get("GROK_BASE_URL")
+    if not base:
+        sys.exit("错误: GROK_BASE_URL 未设置（grok 通道独立配置，不读 OPENAI_BASE_URL）")
     key = os.environ.get("GROK_API_KEY")
     if not key:
         sys.exit("错误: GROK_API_KEY 未设置")

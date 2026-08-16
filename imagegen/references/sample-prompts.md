@@ -2,7 +2,7 @@
 
 These prompt recipes are shared across both top-level modes of the skill:
 - built-in `image_gen` tool (default)
-- `scripts/image_gen.py` CLI fallback for explicit or user-confirmed CLI/API/model requests
+- `scripts/openai/image_gen.py` CLI fallback for explicit or user-confirmed CLI/API/model requests
 
 Use these as starting points. They are intentionally complete prompt recipes, not the default amount of augmentation to add to every user request.
 

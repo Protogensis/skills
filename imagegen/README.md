@@ -5,8 +5,10 @@
 | 通道 | 模型 | 用途 |
 |---|---|---|
 | 内置 `image_gen` 工具 | — | 默认优先，无需 key（Codex 内置） |
-| 官方 CLI fallback | `gpt-image-2` | 显式指定 API 路径时，需 `OPENAI_API_KEY` |
-| Grok 通道（扩展） | `grok-imagine-image-quality` 等 | 走 OpenAI 兼容中转站的备用生图通道 |
+| 官方 CLI fallback（`scripts/openai/`） | `gpt-image-2` | 显式指定 API 路径时，需 `OPENAI_API_KEY` |
+| Grok 通道（`scripts/grok/`） | `grok-imagine-image-quality` 等 | 走 OpenAI 兼容中转站的备用生图通道，配置独立 |
+
+脚本按供应商分目录（`scripts/<provider>/`），后续新增供应商=新增子目录，互不影响。
 
 ## 安装
 
@@ -49,9 +51,13 @@ ln -s ~/tmp-skills/imagegen ~/.agents/skills/imagegen
    ```
 
    ```ini
-   OPENAI_API_KEY=你的key          # 官方或中转站
+   # openai 通道
+   OPENAI_API_KEY=你的key
    OPENAI_BASE_URL=https://.../v1  # 必须以 /v1 结尾；官方可省略
-   GROK_API_KEY=                   # Grok 通道（可选）
+
+   # grok 通道（与上面互相独立；同站则 base_url 填相同值）
+   GROK_BASE_URL=https://.../v1
+   GROK_API_KEY=
    GROK_IMAGE_MODEL=grok-imagine-image-quality
    GROK_EDIT_MODEL=grok-imagine-edit
    ```

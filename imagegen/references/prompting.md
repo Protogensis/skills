@@ -2,7 +2,7 @@
 
 These prompting principles are shared by both top-level modes of the skill:
 - built-in `image_gen` tool (default)
-- explicit `scripts/image_gen.py` CLI fallback
+- explicit `scripts/openai/image_gen.py` CLI fallback
 
 This file is about prompt structure, specificity, and iteration. Fallback-only execution controls such as `quality`, `input_fidelity`, masks, output format, and output paths live in the fallback docs.
 

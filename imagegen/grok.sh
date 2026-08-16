@@ -1,5 +1,5 @@
 #!/bin/sh
-# grok 生图包装器：从 .env 读取 base_url + GROK_API_KEY
+# grok 生图包装器：从 .env 读取 GROK_BASE_URL + GROK_API_KEY（与 openai 通道配置互相独立）
 set -e
 SELF="$0"
 while [ -L "$SELF" ]; do
@@ -24,4 +24,4 @@ else
   exit 1
 fi
 set -a; . "$ENV_FILE"; set +a
-exec "$DIR/.venv/bin/python" "$DIR/scripts/grok_gen.py" "$@"
+exec "$DIR/.venv/bin/python" "$DIR/scripts/grok/grok_gen.py" "$@"

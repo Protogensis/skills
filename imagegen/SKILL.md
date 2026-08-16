@@ -12,7 +12,7 @@ Generates or edits images for the current project (for example website assets, g
 This skill has exactly two top-level modes:
 
 - **Default built-in tool mode (preferred):** built-in `image_gen` tool for image generation, editing, and transparent-image requests. Does not require `OPENAI_API_KEY`.
-- **Fallback CLI mode:** `scripts/image_gen.py` CLI. Use when the user explicitly asks for or confirms the CLI/API/model path. Requires `OPENAI_API_KEY`.
+- **Fallback CLI mode:** `scripts/openai/image_gen.py` CLI. Use when the user explicitly asks for or confirms the CLI/API/model path. Requires `OPENAI_API_KEY`.
 
 Within CLI fallback, the CLI exposes three subcommands:
 
@@ -27,8 +27,8 @@ Rules:
 - Never silently switch from built-in `image_gen` or CLI `gpt-image-2` to CLI `gpt-image-1.5`; ask the user first unless they explicitly requested `gpt-image-1.5`.
 - The word `batch` by itself does not mean CLI fallback. If the user asks for many assets or says to batch-generate assets without explicitly asking for CLI/API/model controls, stay on the built-in path and issue one built-in call per requested asset or variant.
 - If the built-in tool fails or is unavailable, tell the user the CLI fallback exists and that it requires `OPENAI_API_KEY`. Proceed only if the user explicitly asks for that fallback.
-- If the user explicitly asks for CLI mode, use the bundled `scripts/image_gen.py` workflow. Do not create one-off SDK runners.
-- Never modify `scripts/image_gen.py`. If something is missing, ask the user before doing anything else.
+- If the user explicitly asks for CLI mode, use the bundled `scripts/openai/image_gen.py` workflow. Do not create one-off SDK runners.
+- Never modify `scripts/openai/image_gen.py`. If something is missing, ask the user before doing anything else.
 
 Built-in save-path policy:
 - In built-in tool mode, Codex saves generated images under `$CODEX_HOME/*` by default.
@@ -47,7 +47,7 @@ Fallback-only docs/resources for CLI mode:
 - `references/cli.md`
 - `references/image-api.md`
 - `references/codex-network.md`
-- `scripts/image_gen.py`
+- `scripts/openai/image_gen.py`
 
 ## When to use
 - Generate a new image (concept art, product shot, cover, website hero)
@@ -309,14 +309,14 @@ If installation is not possible in this environment, tell the user which depende
 ## Reference map
 - `references/prompting.md`: shared prompting principles for both modes.
 - `references/sample-prompts.md`: shared copy/paste prompt recipes for both modes.
-- `references/cli.md`: fallback-only CLI usage via `scripts/image_gen.py`.
+- `references/cli.md`: fallback-only CLI usage via `scripts/openai/image_gen.py`.
 - `references/image-api.md`: fallback-only API/CLI parameter reference.
 - `references/codex-network.md`: fallback-only network/sandbox troubleshooting for CLI mode.
-- `scripts/image_gen.py`: fallback-only CLI implementation. Use only when the user explicitly chooses or confirms CLI mode.
+- `scripts/openai/image_gen.py`: fallback-only CLI implementation. Use only when the user explicitly chooses or confirms CLI mode.
 
 ## Grok 生图通道（本机扩展）
 
-与官方 CLI 平行的第二条生图通道，走同一中转站的 `GROK_API_KEY`，全局命令 `grok-image`（即 `grok.sh` → `scripts/grok_gen.py`）。
+与官方 CLI 平行的第二条生图通道，配置与 openai 通道**互相独立**（各自的 base_url/key），全局命令 `grok-image`（即 `grok.sh` → `scripts/grok/grok_gen.py`）。
 
 ### 命令
 ```sh
@@ -337,7 +337,13 @@ grok-image edit --image 原图.png --prompt "..." --out out.png
 
 ### .env 相关键
 查找顺序：`$IMAGEGEN_ENV` → `<skill>/.env` → `~/.config/imagegen/.env`（推荐后者，技能更新不丢）
+
+**openai 通道（`run.sh`，gpt-image-2）：**
 - `OPENAI_BASE_URL`：必须以 `/v1` 结尾（OpenAI SDK 直接在其后拼路径）
+- `OPENAI_API_KEY`
+
+**grok 通道（`grok.sh`，grok-imagine 系）：**
+- `GROK_BASE_URL`：grok 专用 base_url（与 `OPENAI_BASE_URL` 互不影响；同站则填相同值）
 - `GROK_API_KEY`：grok 通道 key
 - `GROK_IMAGE_MODEL`：默认生成模型（质量档 `grok-imagine-image-quality`）
 - `GROK_EDIT_MODEL`：默认编辑模型（`grok-imagine-edit`）
