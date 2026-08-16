@@ -41,10 +41,11 @@ ln -s ~/tmp-skills/imagegen ~/.agents/skills/imagegen
    uv pip install openai pillow
    ```
 
-2. 复制并填写密钥：
+2. 复制并填写密钥（**推荐放 `~/.config/imagegen/.env`**，技能更新/重装不会丢）：
 
    ```sh
-   cp .env.example .env
+   mkdir -p ~/.config/imagegen
+   cp .env.example ~/.config/imagegen/.env
    ```
 
    ```ini

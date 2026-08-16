@@ -331,6 +331,7 @@ grok-image edit --image 原图.png --prompt "..." --out out.png
 ```
 
 ### .env 相关键
+查找顺序：`$IMAGEGEN_ENV` → `<skill>/.env` → `~/.config/imagegen/.env`（推荐后者，技能更新不丢）
 - `OPENAI_BASE_URL`：必须以 `/v1` 结尾（OpenAI SDK 直接在其后拼路径）
 - `GROK_API_KEY`：grok 通道 key
 - `GROK_IMAGE_MODEL`：默认生成模型（质量档 `grok-imagine-image-quality`）

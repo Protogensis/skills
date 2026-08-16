@@ -38,7 +38,7 @@ skills/
     └── ...
 ```
 
-密钥类配置统一走各技能自己的 `.env.example` → `.env`，`.env` 一律不入库。
+密钥类配置不入库：仓库只放 `.env.example` 模板，`.env` 一律不入库、不随技能分发。`.env` 推荐放技能目录外，避免更新/重装丢失——imagegen 的做法：放 `~/.config/imagegen/.env`，wrapper 依次查找 `$IMAGEGEN_ENV` → 技能目录 `.env` → `~/.config/imagegen/.env`。
 
 ## 许可
 
